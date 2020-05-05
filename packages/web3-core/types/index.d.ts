@@ -19,7 +19,6 @@
  */
 
 import * as net from 'net';
-import { EventEmitter } from "events"
 import {
     HttpProviderBase,
     HttpProviderOptions,
@@ -411,9 +410,16 @@ export interface LogsOptions {
 
 export type BlockNumber = string | number | BN | BigNumber | 'latest' | 'pending' | 'earliest' | 'genesis';
 
+export interface RequestArguments {
+    method: string;
+    params?: unknown;
+    [key: string]: unknown;
+}
+
 export interface AbstractProvider {
-    send(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void): void;
     sendAsync(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void): void;
+    send?(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void): void;
+    request?(args: RequestArguments): Promise<unknown>;
   }
 
 export type provider =
